@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>Scala workshop - idiomatic error handling</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
@@ -62,17 +62,18 @@ Clone this repo to get started:
 ```
 git clone 
 ```
-- Feel free to pair.
+- Pairing is encouraged!
+- Feel free to <strike>heckle</strike> ask questions.
 - Help your friends if they get stuck!
 - By the way, do we all know each other?
 
 </script></section>
 <section>
 	<section id="principles" class="content" data-markdown><script type="text/template">
-## General principles
+## General principles!
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
-## Scala principles
+## What's Scala about anyway
 - Functional
 - Type safe
 	</script></section>
@@ -96,21 +97,71 @@ Enough fancy words, let's get some practice.
 ## `Option`
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
-## `Option`
+## Handling optional values
 
-Use for handling... optional values.
+```scala
+trait CatStore {
+  def putCat(cat: Cat): Unit
+  def getCat(name: String): Option[Cat]
+}
+```
 
-//TODO: show example
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
 ## `Option`
 
-//FIXME: show ADT structure
+```scala
+sealed trait Option[T]
+case object None extends Option[Nothing]
+case class Some(value: T) extends Option[T]
+```
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
 ## Working with options
 
-//FIXME: show some useful methods
+Creating options
+```
+scala> val o1 = Some(1)
+o1: Some[Int] = Some(1)
+
+scala> val o2 = None
+o2: None.type = None
+
+scala> o1.isDefined
+res0: Boolean = true
+
+scala> o2.isDefined
+res2: Boolean = false
+```
+
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## Working with options (2)
+
+Creating options
+```
+scala> Option.empty[Int]
+res3: Option[Int] = None
+
+scala> Option(1)
+res4: Option[Int] = Some(1)
+
+```
+
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## Working with options (2)
+
+Manipulating options
+```
+scala> Option.empty[Int]
+res3: Option[Int] = None
+
+scala> Option(1)
+res4: Option[Int] = Some(1)
+
+```
+
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
 ## Exercise: CatStore (1)
@@ -124,13 +175,44 @@ Use for handling... optional values.
 
 //FIXME: example!
 	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## Aside: let's talk about null
+
+> I call it my billion-dollar mistake. It was the invention of the null reference in 1965. [...] My goal was to ensure that all use of references should be absolutely safe, with checking performed automatically by the compiler. But I couldn't resist the temptation to put in a null reference [...]. This has led to innumerable errors, vulnerabilities, and system crashes, which have probably caused a billion dollars of pain and damage in the last forty years.
+
+
+[Check out Tony Hoare's talk](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare)
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## Exercise: Handling null
+
+
+
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## What about `.get`?
+
+Using `.get` brings us back in the messy world of runtime exceptions and should be avoided.
+
+- Check the scaladoc for alternatives when tempted to use it.
+- If you're certain a value can't be `None`, try to refactor your model to remove the option. Case classes are cheap!
+	</script></section>
 </section>
 <section>
 	<section id="try" class="content" data-markdown><script type="text/template">
 ## `Try`
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
-## 2
+## So I heard you don't like checked exceptions...
+
+Fine. Exceptions are unchecked now. Happy?
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## OK but...
+
+```
+
+```
 	</script></section>
 </section>
 <section>
@@ -138,7 +220,24 @@ Use for handling... optional values.
 ## `Either`
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
-## 2
+## Business errors vs system errors
+	</script></section>
+</section>
+<section>
+	<section id="conclusion" class="content" data-markdown><script type="text/template">
+## Wrapping it up...
+We've learnt how to use algebraic data types and function composition to handle business and system errors.
+
+By the way! Congratulations, you now have practiced using Monads as well.
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## When to use what
+//TODO: table summarising option vs either vs try
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## Going further!
+
+- 
 	</script></section>
 </section>
 

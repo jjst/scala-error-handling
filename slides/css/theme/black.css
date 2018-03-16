@@ -125,8 +125,8 @@ body {
 .reveal blockquote {
   display: block;
   position: relative;
-  width: 70%;
-  margin: 20px auto;
+  width: 95%;
+  margin: 5px auto;
   padding: 5px;
   font-style: italic;
   background: rgba(255, 255, 255, 0.05);
