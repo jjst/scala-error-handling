@@ -25,14 +25,19 @@
 		<div class="reveal">
 			<div class="slides">
 
-<section id="course-overview" class="content" data-markdown><script type="text/template">
+<section id="intro" class="content" data-markdown><script type="text/template">
+## Idiomatic error handling in Scala
+
+
+</script></section>
+<section id="objectives" class="content" data-markdown><script type="text/template">
 ## Objectives
 
 Understand the main principles, paradigms and data structures used for error
 handling in Scala.
 
 </script></section>
-<section id="course-overview" class="content" data-markdown><script type="text/template">
+<section id="how" class="content" data-markdown><script type="text/template">
 ## What we'll do
 
 - A bit of theory
@@ -40,7 +45,7 @@ handling in Scala.
 - Some exercises
 
 </script></section>
-<section id="course-overview" class="content" data-markdown><script type="text/template">
+<section id="overview" class="content" data-markdown><script type="text/template">
 ## Workshop Overview
 
 - General Principles
@@ -49,47 +54,90 @@ handling in Scala.
 - `Either`
 
 </script></section>
-<section id="course-overview" class="content" data-markdown><script type="text/template">
+<section id="logistics" class="content" data-markdown><script type="text/template">
 ## Logistics!
 
+Clone this repo to get started:
+//FIXME: Add link
 ```
 git clone 
 ```
-By the way, do we all know each other?
-Feel free to pair on work on your own.
-Help your friends if they get stuck!
+- Feel free to pair.
+- Help your friends if they get stuck!
+- By the way, do we all know each other?
 
 </script></section>
 <section>
-	<section id="test" class="content" data-markdown><script type="text/template">
+	<section id="principles" class="content" data-markdown><script type="text/template">
 ## General principles
 	</script></section>
-	<section id="test" class="content" data-markdown><script type="text/template">
-## Type safety
-Reify errors as part of the type signature
+	<section class="content" data-markdown><script type="text/template">
+## Scala principles
+- Functional
+- Type safe
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## Error handling should...
+- Avoid side-effects
+- Be expressed through the type system
+
+Have as much errors as possible caught at compile-time.
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## Achieving idiomatic error handling
+- Algebraic Data Types (disjoint unions)
+- Functional sequential composition
+
+Enough fancy words, let's get some practice.
 	</script></section>
 </section>
 <section>
-	<section id="test" class="content" data-markdown><script type="text/template">
+	<section id="option" class="content" data-markdown><script type="text/template">
 ## `Option`
 	</script></section>
-	<section id="test" class="content" data-markdown><script type="text/template">
-## 2
+	<section class="content" data-markdown><script type="text/template">
+## `Option`
+
+Use for handling... optional values.
+
+//TODO: show example
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## `Option`
+
+//FIXME: show ADT structure
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## Working with options
+
+//FIXME: show some useful methods
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## Exercise: CatStore (1)
+
+
+//FIXME: example!
+	</script></section>
+	<section class="content" data-markdown><script type="text/template">
+## Exercise: CatStore (2)
+
+
+//FIXME: example!
 	</script></section>
 </section>
 <section>
-	<section id="test" class="content" data-markdown><script type="text/template">
+	<section id="try" class="content" data-markdown><script type="text/template">
 ## `Try`
 	</script></section>
-	<section id="test" class="content" data-markdown><script type="text/template">
+	<section class="content" data-markdown><script type="text/template">
 ## 2
 	</script></section>
 </section>
 <section>
-	<section id="test" class="content" data-markdown><script type="text/template">
+	<section id="either" class="content" data-markdown><script type="text/template">
 ## `Either`
 	</script></section>
-	<section id="test" class="content" data-markdown><script type="text/template">
+	<section class="content" data-markdown><script type="text/template">
 ## 2
 	</script></section>
 </section>
@@ -108,6 +156,7 @@ Reify errors as part of the type signature
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
+				history: true,
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
