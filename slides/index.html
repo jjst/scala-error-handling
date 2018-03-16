@@ -57,10 +57,11 @@ handling in Scala.
 <section id="logistics" class="content" data-markdown><script type="text/template">
 ## Logistics!
 
-Clone this repo to get started:
-//FIXME: Add link
-```
-git clone 
+Getting started
+```bash
+git clone git@github.com:jjst/scala-error-handling.git
+cd scala-error-handling
+sbt
 ```
 - Pairing is encouraged!
 - Feel free to <strike>heckle</strike> ask questions.
@@ -108,7 +109,7 @@ trait CatStore {
 
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
-## `Option`
+## `Option` - ADT structure
 
 ```scala
 sealed trait Option[T]
@@ -117,10 +118,9 @@ case class Some(value: T) extends Option[T]
 ```
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
-## Working with options
+## Creating options
 
-Creating options
-```
+```scala
 scala> val o1 = Some(1)
 o1: Some[Int] = Some(1)
 
@@ -136,33 +136,70 @@ res2: Boolean = false
 
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
-## Working with options (2)
+## Creating options (2)
 
-Creating options
-```
+```scala
 scala> Option.empty[Int]
 res3: Option[Int] = None
 
 scala> Option(1)
 res4: Option[Int] = Some(1)
-
 ```
+
+Useful for when type inference gets things wrong. ([example](https://stackoverflow.com/a/29579600/887422))
 
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
-## Working with options (2)
+## Manipulating options
 
-Manipulating options
-```
+Pattern matching
+```scala
+scala> val o1 = Option(1)
+o1: Option[Int] = Some(1)
+
+scala> o1 match {
+     |   case Some(i) => println(s"I haz a a value! It's $i")
+     |   case None => println("Got nothing. Sad!")
+     | }
+I haz a a value! It's 1
 scala> Option.empty[Int]
 res3: Option[Int] = None
-
-scala> Option(1)
-res4: Option[Int] = Some(1)
-
 ```
 
+💡 What happens if we use `val o1 = Some(1)` instead?
+
 	</script></section>
+    <section class="content" data-markdown><script type="text/template">
+        ## Manipulating options
+
+        ```scala
+        scala> o1.map(_ * 2)
+        res8: Option[Int] = Some(2)
+        scala> o2.map(_ * 2)
+        res11: Option[Int] = None
+        scala> o2.getOrElse(0)
+        res12: Int = 0
+        scala> o1.foreach(println(_))
+        1
+        ```
+
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+        ## Manipulating options
+
+        Functional composition
+
+        ```scala
+        scala> o1.flatMap { val1 => o2.map { val2 => val1 + val2  } }
+        res14: Option[Int] = None
+        scala> for {
+        |   val1 <- o1
+        |   val2 <- o2
+        | } yield (val1 + val2)
+        res20: Option[Int] = None
+        ```
+
+    </script></section>
 	<section class="content" data-markdown><script type="text/template">
 ## Exercise: CatStore (1)
 

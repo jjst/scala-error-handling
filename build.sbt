@@ -1,3 +1,3 @@
-name := "scala-error-handling-workshop"
+name := "scala-error-handling"
 
 scalaVersion := "2.12.4"
