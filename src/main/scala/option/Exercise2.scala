@@ -5,8 +5,7 @@ class ProductionReadyCatStore(cats: Cat*) extends CatStore {
 
   override def getCat(name: String): Option[Cat] = {
     // Implement this!
-    // Hint: use the `nameToCat` map defined above.
-    ???
+    nameToCat.get(name)
   }
 }
 

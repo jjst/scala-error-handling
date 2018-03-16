@@ -257,9 +257,87 @@ Fine. Exceptions are unchecked now. Happy?
 ## OK but...
 
 ```
+def thisIsFine(): Int = {
+  throw new RuntimeException("Didn't excpect that, did you?")
+}
 
+// The type signature says this returns an Int
+// surely this will work fine...
+println(thisIsFine()) // Boom!
 ```
 	</script></section>
+    <section class="content" data-markdown><script type="text/template">
+## Try
+
+Try lets us handle code that can potentially blow up in a safer way.
+
+Using it in a type signature we can also make explicit calling a method might blow up.
+
+```
+def thisIsFine(): Try[Int] = Try {
+    throw new RuntimeException("Didn't excpect that, did you?")
+}
+
+// The type signature says this returns an Int
+// surely this will work fine...
+println(thisIsFine()) // Failure(...)
+```
+
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+        ## Try - (simplified) ADT
+
+        ```scala
+        sealed trait Try[T]
+        case class Failure[T](exception: Throwable) extends Try[T]
+        case class Success(value: T) extends Try[T]
+        ```
+
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+## Using Try
+
+```
+scala> val t1 = Try(1)
+t1: scala.util.Try[Int] = Success(1)
+
+scala> val t2 = Try(throw new RuntimeException)
+t2: scala.util.Try[Nothing] = Failure(java.lang.RuntimeException)
+```
+</script></section>
+<section class="content" data-markdown><script type="text/template">
+    ## Using Try
+
+    ```
+scala> t2.getOrElse(0)
+res0: Int = 0
+
+scala> t1.map(_ + 2)
+res1: scala.util.Try[Int] = Success(3)
+
+scala> t1.toOption
+res2: ...
+    ```
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+        ## Exercise
+
+Catsy has pivoted. We now provide human to cat age conversion as a service. The market is huge!
+
+Open `try/Exercise1.scala`. Implement the method to calculate your cat age. You will need to convert
+the input from a string to an Int using `.toInt`. What happens if you pass in invalid input?
+
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+        ## Exercise 2
+
+        The market is booming! Product is now asking us to implement a generic age
+        calculator that would work for any animal.
+
+        Open `try/Exercise2.scala`. Implement the method to calculate the age.
+        What happens if you pass in an invalid factor? What happens if you pass a factor of 0?
+
+    </script></section>
 	<section class="content" data-markdown><script type="text/template">
 ## Aside: Try and Futures
 
@@ -271,9 +349,71 @@ Fine. Exceptions are unchecked now. Happy?
 	<section id="either" class="content" data-markdown><script type="text/template">
 ## `Either`
 	</script></section>
+    <section class="content" data-markdown><script type="text/template">
+## `Try` is nice, but...
+
+* Throwing exceptions is expensive, and is a side-effecting construct.
+
+* Even wrapping a construct in a Try is not very explicit:
+
+```
+def howDoesThisFail(): Try[Int]
+```
+
+The type signature doesn't tell us anything about how the method might fail,
+and the kind of errors we should take care of.
+    </script></section>
 	<section class="content" data-markdown><script type="text/template">
 ## Business errors vs system errors
+
+There is a whole class of errors that is not "exceptional". They are expected to happen and your
+API/service contract will probably specify which behaviour is expected in this case.
+
+We don't want to touch exceptions for those cases, so what's the alternative? Enter `Either`.
 	</script></section>
+    <section class="content" data-markdown><script type="text/template">
+## Either - (simplified) ADT
+
+```
+sealed trait Either[L, R]
+case class Left[L, R](value: L) extends Either[L, R]
+case class Right[L, R](value: R) extends Either[L, R]
+```
+
+
+When using `Either` for error-handling, by convention the error type is on the `Left` side.
+
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+## Either - example
+
+```
+object Color {
+  case object Black extends Color
+  case object Grey extends Color
+  case object White extends Color
+
+  def fromString(s: String): Either[String, Color] = s match {
+    case "black" => Right(Black)
+    case "grey" => Right(Grey)
+    case "white" => Right(White)
+    case other => Left(s"""Cannot parse '$other' as Color""")
+  }
+}
+```
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+## Either - Usage
+
+```
+See REPL
+```
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+        ## Exercise
+
+        Implement Cat parsing, failing using `Either`. See `either/Exercise1.scala`.
+    </script></section>
 </section>
 <section>
 	<section id="conclusion" class="content" data-markdown><script type="text/template">
@@ -283,13 +423,12 @@ We've learnt how to use algebraic data types and function composition to handle 
 By the way! Congratulations, you now have practiced using Monads as well.
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
-## When to use what
-//TODO: table summarising option vs either vs try
-	</script></section>
-	<section class="content" data-markdown><script type="text/template">
 ## Going further!
 
-- 
+In Cats:
+- MonadError
+- Validated
+- Additional methods available on Option, Try, Either to convert from one to the other.
 	</script></section>
 </section>
 

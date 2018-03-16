@@ -3,13 +3,15 @@ package option
 class CatService(store: CatStore) {
   /**
     * getOwnerName uses the CatStore to retrieve a cat by name,
-    * retrieve a cat's owner, and return its name.
+    * retrieve the cat's owner, and return its name.
     * @param catName
     * @return
     */
   def getOwnerName(catName: String): Option[String] = {
-    //TODO: Implement this!
-    ???
+    for {
+      cat <- store.getCat(catName)
+      owner <- cat.owner
+    } yield owner.name
   }
 }
 

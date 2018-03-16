@@ -6,13 +6,10 @@ trait MicrochipApiClient {
 
 class MicrochipService(catStore: CatStore, microchipApiClient: MicrochipApiClient) {
   def getMicrochipMetadata(catName: String): Option[Microchip.Metadata] = {
-    // TODO: what is the problem with this code?
-    // Try to fix it *without* changing MicrochipApiClient.
-    // If you could change MicrochipApiClient, what would you do?
-    catStore.getCat(catName).map { cat =>
-      val microchip = microchipApiClient.getMicrochip(cat.name)
-      microchip.metadata
-    }
+    for {
+      cat <- catStore.getCat(catName)
+      microchip <- Some(microchipApiClient.getMicrochip(cat.name))
+    } yield microchip.metadata
   }
 }
 
