@@ -102,7 +102,6 @@ Enough fancy words, let's get some practice.
 
 ```scala
 trait CatStore {
-  def putCat(cat: Cat): Unit
   def getCat(name: String): Option[Cat]
 }
 ```
@@ -203,17 +202,21 @@ res3: Option[Int] = None
 	<section class="content" data-markdown><script type="text/template">
 ## Exercise: CatStore (1)
 
+We're launching Catsy, our new startup. It's like Uber, but for cats. As part of the dev team you're responsible for implementing `CatService`.
 
-//FIXME: example!
+Open `option/Exercise1.scala` and implement the `getOwnerName()` method of `CatService` so that it returns a cat's owner name.
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
 ## Exercise: CatStore (2)
 
+Our `catStore` from Exercise 1 was clearly not production-ready.
 
-//FIXME: example!
+We are going to implement a proper cat store backed by a map from cat name to cat.
+
+Open `option/Exercise2.scala` and implement the `getCat()` method of our new `ProductionReadyCatStore`.
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
-## Aside: let's talk about null
+## Aside: let's talk about null!
 
 > I call it my billion-dollar mistake. It was the invention of the null reference in 1965. [...] My goal was to ensure that all use of references should be absolutely safe, with checking performed automatically by the compiler. But I couldn't resist the temptation to put in a null reference [...]. This has led to innumerable errors, vulnerabilities, and system crashes, which have probably caused a billion dollars of pain and damage in the last forty years.
 
@@ -223,7 +226,13 @@ res3: Option[Int] = None
 	<section class="content" data-markdown><script type="text/template">
 ## Exercise: Handling null
 
+Another developer was responsible for implementing the microchip service,
+which fetches metadata contained on a cat's microchip if it has one.
 
+Unfortunately they used a legacy API client and we can't change it... :-(
+
+Run `option/Exercise3.scala`. What happens? Why?
+Can you update the code to fix it **without changing** `MicrochipApiClient`?
 
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">

@@ -1,13 +1,12 @@
 package option
 
-class DummyCatStore extends CatStore {
-
-
-
-  override def getCat(name: String): Option[Cat] =
-}
-
 class CatService(store: CatStore) {
+  /**
+    * getOwnerName uses the CatStore to retrieve a cat by name,
+    * retrieve a cat's owner, and return its name.
+    * @param catName
+    * @return
+    */
   def getOwnerName(catName: String): Option[String] = {
     //TODO: Implement this!
     ???
@@ -18,9 +17,8 @@ object Exercise1 extends App {
 
   val catStore = new CatStore {
     /*
-      * A very dumb cat store that only knows about 2 cats.
-      * You can't add cats to it.
-      */
+     * A very dumb cat store that only knows about 2 cats.
+     */
     override def getCat(name: String): Option[Cat] = name match {
       case "Garfield" => Some(Cat(name = "Garfield", owner = Some(Owner("Jonathan Arbuckle"))))
       case "Scratchy" => Some(Cat(name = "Scratchy", owner = None))
