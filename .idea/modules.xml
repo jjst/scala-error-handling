@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scala-error-handling.iml" filepath="$PROJECT_DIR$/.idea/modules/scala-error-handling.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scala-error-handling-build.iml" filepath="$PROJECT_DIR$/.idea/modules/scala-error-handling-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scala-error-handling-workshop.iml" filepath="$PROJECT_DIR$/.idea/modules/scala-error-handling-workshop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scala-error-handling-workshop-build.iml" filepath="$PROJECT_DIR$/.idea/modules/scala-error-handling-workshop-build.iml" />
     </modules>
   </component>
 </project>
