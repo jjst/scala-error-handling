@@ -249,49 +249,96 @@ Using `.get` brings us back in the messy world of runtime exceptions and should 
 ## `Try`
 	</script></section>
 	<section class="content" data-markdown><script type="text/template">
-## So I heard you don't like checked exceptions...
+## Reminder
 
-Fine. Exceptions are unchecked now. Happy?
+We saw how to compose errors cause by the absence/presence of a value in a type-safe and composable way.
+What about other types of errors?
 	</script></section>
-	<section class="content" data-markdown><script type="text/template">
-## OK but...
+    <section class="content" data-markdown><script type="text/template">
+## `try/catch`
 
-```
-def thisIsFine(): Int = {
-  throw new RuntimeException("Didn't excpect that, did you?")
+In Scala, like in Java, exceptions can be handled with a `try/catch` (`finally`) block.
+
+The `catch` block takes a partial function as an argument; use pattern matching to decide which exceptions to catch.
+```scala
+try {
+   println(1 / 0)
+} catch {
+   case _: ArithmeticException => println("Woops!")
 }
-
-// The type signature says this returns an Int
-// surely this will work fine...
-println(thisIsFine()) // Boom!
 ```
-	</script></section>
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+## `try/catch`
+
+`try/catch` is an expression rather than a statement, so you can do something like:
+```scala
+val answer = try {
+  1 / 0
+} catch {
+  case _: ArithmeticException => 42
+}
+```
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+## `try/catch` pros/cons
+
+* + Can do error recovery with `try/catch/finally`
+* + Is an expression
+
+
+* - Not good for chaining errors
+* - Not explicit from the type how something might blow up!
+
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+        ## Where did checked exceptions go?
+
+        In Java, there is a distintion between checked exceptions (which always have to be caught) and unchecked exceptions (which don't).
+        In Scala, all exceptions are unchecked.
+        ```
+        def thisIsFine(): Int = {
+        throw new Exception("Surprise!")
+        }
+
+        println(thisIsFine()) // This blows up!
+        ```
+
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+## Exercise
+
+Catsy has pivoted. We now provide human to cat age conversion as a service. The market is huge!
+
+Open `try/Exercise1.scala`, and run the code. What happens if you pass in a random string input and why?
+Fix it using a `try/catch` expression to default the value to `defaultAge` if an invalid value is passed.
+
+    </script></section>
     <section class="content" data-markdown><script type="text/template">
 ## Try
 
 Try lets us handle code that can potentially blow up in a safer way.
 
-Using it in a type signature we can also make explicit calling a method might blow up.
+Using it in a type signature we can also make explicit calling a method might blow up. It allows us to handle exception
+in a structured way and express them at compile-time.
 
 ```
 def thisIsFine(): Try[Int] = Try {
-    throw new RuntimeException("Didn't excpect that, did you?")
+    throw new Exception("Surprise!")
 }
 
-// The type signature says this returns an Int
-// surely this will work fine...
 println(thisIsFine()) // Failure(...)
 ```
 
     </script></section>
     <section class="content" data-markdown><script type="text/template">
-        ## Try - (simplified) ADT
+## Try - (simplified) ADT
 
-        ```scala
-        sealed trait Try[T]
-        case class Failure[T](exception: Throwable) extends Try[T]
-        case class Success(value: T) extends Try[T]
-        ```
+```scala
+sealed trait Try[T]
+case class Failure[T](exception: Throwable) extends Try[T]
+case class Success(value: T) extends Try[T]
+```
 
     </script></section>
     <section class="content" data-markdown><script type="text/template">
@@ -306,7 +353,20 @@ t2: scala.util.Try[Nothing] = Failure(java.lang.RuntimeException)
 ```
 </script></section>
 <section class="content" data-markdown><script type="text/template">
-    ## Using Try
+## Using Try - pattern matching
+
+```
+scala> val t = Try(1 / 0)
+res0: Int = 0
+scala> t match {
+   case Success(_) => println("yay")
+   case Failure(e: NumberFormatException) => println("Got number format exception")
+   case _ => println("Got something else")
+}
+```
+</script></section>
+<section class="content" data-markdown><script type="text/template">
+## Using Try
 
     ```
 scala> t2.getOrElse(0)
@@ -320,26 +380,51 @@ res2: ...
     ```
     </script></section>
     <section class="content" data-markdown><script type="text/template">
-        ## Exercise
+## Using Try
 
-Catsy has pivoted. We now provide human to cat age conversion as a service. The market is huge!
+`Try` has a `flatMap` method, which means we can chain calls in a for-comprehension.
+```
+scala> for {
+        i <- Try("foo".toInt)
+        res <- Try(i / 0)
+      } yield res
+```
+    </script></section>
+    <section class="content" data-markdown><script type="text/template">
+        ## Exercise 1 (continued!)
 
-Open `try/Exercise1.scala`. Implement the method to calculate your cat age. You will need to convert
-the input from a string to an Int using `.toInt`. What happens if you pass in invalid input?
+Change Exercise1 to use `Try` instead of a `try/catch` block.
 
     </script></section>
     <section class="content" data-markdown><script type="text/template">
-        ## Exercise 2
+## Exercise 2
 
-        The market is booming! Product is now asking us to implement a generic age
-        calculator that would work for any animal.
+Open `try/Exercise2.scala`. Implement the method to calculate and print your cat age using the for comprehension as instructed.
+What happens if you pass in an invalid factor? What happens if you pass a factor of 0?
 
-        Open `try/Exercise2.scala`. Implement the method to calculate the age.
-        What happens if you pass in an invalid factor? What happens if you pass a factor of 0?
+Bonus: change `calculateAge()` to return a `Try[Int]`.
 
     </script></section>
+    <section class="content" data-markdown><script type="text/template">
+## `Try` pros/cons
+
+* + Lets use use the type system to represent failures at compile-time instead of runtime
+* + Good for chaining errors
+
+
+* - No support for `finally`
+* - Throwing exceptions is expensive, and is a side-effecting construct.
+* - Even wrapping a construct in a Try is not very explicit:
+
+```
+def howDoesThisFail(): Try[Int]
+```
+
+The type signature doesn't tell us anything about how the method might fail,
+and the kind of errors we should take care of.
+    </script></section>
 	<section class="content" data-markdown><script type="text/template">
-## Aside: Try and Futures
+## Try and Futures
 
 `Future` is `Try`'s dual, representating asynchronous computations (that might fail).
 
